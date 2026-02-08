@@ -1,0 +1,21 @@
+version: "3.8"  # Compose dosya formatı versiyonu
+
+services:       # Servislerimiz (Container'larımız)
+  
+  # 1. Servis: Web Sitemiz (Nginx)
+  websitem:
+    image: nginx:alpine
+    ports:
+      - "8080:80"    # Dışarıdan 8080, içeriden 80
+    networks:
+      - benim-agim   # Hangi ağa bağlı?
+
+  # 2. Servis: Arka Plandaki Veritabanı (Örnek olarak Redis)
+  veritabani:
+    image: redis:alpine
+    networks:
+      - benim-agim   # Aynı ağa bağlı!
+
+networks:       # Ağ Tanımları
+  benim-agim:   # 'docker network create' komutunun otomatik hali
+    driver: bridge

@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  # 1. Veritabanı (En güvenli ve kalıcı olması gereken yer)
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379"
+    networks:
+      - backend-agi
+    secrets:
+      - db_password  # Kasadaki şifreyi kullan
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  # 2. Sonuç Ekranı (Web Arayüzü)
+  result-app:
+    image: dockersamples/examplevotingapp_result:before
+    ports:
+      - "5001:80"
+    networks:
+      - backend-agi
+    deploy:
+      replicas: 2          # 2 tane olsun, yükü paylaşsınlar
+      update_config:
+        parallelism: 1     # Güncelleme gelirse teker teker yap
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  # 3. Görselleştirici (Sistemi İzleme)
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager] # Sadece Yönetici Node'da çalışsın
+
+# --- Ağlar ve Sırlar ---
+networks:
+  backend-agi: # Servislerin konuşacağı özel oda
+
+secrets:
+  db_password:
+    external: true # Bu sırrı dışarıdan (Adım 1'de) oluşturduk

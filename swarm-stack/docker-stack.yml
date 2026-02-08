@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  # 1. Servis: Web Sunucusu (Askerler)
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 10            # 5 tane asker olsun
+      update_config:
+        parallelism: 2       # Güncellerken 2'şer 2'şer yap
+        delay: 10s           # Arada 10 saniye bekle
+      restart_policy:
+        condition: on-failure # Sadece hata verirse yeniden başlat
+
+  # 2. Servis: Görselleştirici (Swarm'ı izlemek için)
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock" # Docker ile konuşabilmesi için
+    deploy:
+      placement:
+        constraints: [node.role == manager] # Bu sadece Yöneticide çalışsın

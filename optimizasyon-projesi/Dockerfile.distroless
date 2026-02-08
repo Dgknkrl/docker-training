@@ -1,0 +1,9 @@
+# Build aşaması (Mutfak)
+FROM python:3.9-slim AS build-env
+COPY main.py .
+
+# Çalışma aşaması (Servis) - Google Distroless kullanıyoruz
+FROM gcr.io/distroless/python3
+COPY --from=build-env /main.py /app/main.py
+WORKDIR /app
+CMD ["main.py"]

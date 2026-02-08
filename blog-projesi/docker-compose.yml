@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # --- 1. Servis: Veritabanı ---
+  db:
+    image: mysql:5.7      # En stabil sürümü kullanıyoruz
+    container_name: mysql-db
+    restart: always       # Çökerse otomatik yeniden başlasın
+    environment:
+      MYSQL_ROOT_PASSWORD: cokgizlisifre
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+    volumes:
+      - db_data:/var/lib/mysql  # Veriler bu kasada saklanacak
+    networks:
+      - site-agi
+
+  # --- 2. Servis: Web Sitesi ---
+  wordpress:
+    image: wordpress:latest
+    container_name: benim-blogum
+    depends_on:
+      - db   # Önce veritabanı başlasın, sonra ben başlarım
+    ports:
+      - "8000:80" # Tarayıcıdan 8000 ile gireceğiz
+    environment:
+      WORDPRESS_DB_HOST: db:3306  # KRİTİK NOKTA: IP yerine servis adı 'db'
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html   # Temalar ve resimler burada saklanacak
+    networks:
+      - site-agi
+
+# --- Depolar ve Ağlar ---
+volumes:
+  db_data: # MySQL verileri için
+  wp_data: # WordPress dosyaları için
+
+networks:
+  site-agi:
+    driver: bridge

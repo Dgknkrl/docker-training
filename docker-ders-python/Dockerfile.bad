@@ -1,0 +1,7 @@
+# Koca bir işletim sistemi ve Go derleyicisi (Yüzlerce MB)
+FROM golang:1.21
+WORKDIR /app
+COPY . .
+# Uygulamayı derle
+RUN go build -o uygulamam main.go
+CMD ["./uygulamam"]

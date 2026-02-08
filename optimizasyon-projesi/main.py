@@ -1,0 +1,1 @@
+print("Ben optimize edilmiş bir uygulamayım!")
