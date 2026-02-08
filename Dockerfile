@@ -1,3 +1,3 @@
 # syntax=docker/dockerfile:1.4
-FROM alpine
-COPY --link /foo /bar
+FROM nginx
+COPY index.html /usr/share/nginx/html/index.html
