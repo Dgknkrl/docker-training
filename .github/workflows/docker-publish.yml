@@ -28,4 +28,4 @@ jobs:
           context: .
           push: true
           # DIKKAT: asagidaki 'kullaniciadi' kismini kendi adinla degistir!
-          tags: kullaniciadi/otomatik-imaj:latest
+          tags: dgknkrl/otomatik-imaj:latest
