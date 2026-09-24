@@ -1,0 +1,15 @@
+repos:
+  # 1. Güvenlik ve Temel Dosya Kontrolleri
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace       # Satır sonundaki gereksiz boşlukları siler
+      - id: end-of-file-fixer         # Dosya sonuna boş satır ekler
+      - id: detect-private-key        # Özel anahtarları (RSA, SSH vb.) yakalar
+
+  # 2. Formatter (Python için Black)
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        language_version: python3

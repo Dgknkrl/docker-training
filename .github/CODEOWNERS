@@ -1,0 +1,6 @@
+# Varsayılan sahip (başka bir kural eşleşmezse tüm projeden sorumlu kişi/ekip)
+* @Dgknkrl
+
+# Belirli klasörleri sadece ilgili kişilere atama örnekleri:
+# /ci/ @devops-ekibi
+# *.py @python-lead
